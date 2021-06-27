@@ -1,30 +1,54 @@
 # Descarga de url usando privoxy con tor
 Bueno sinceramente aún no tengo claro si lo hago con privoxy o solo con tor.<p>
-## Instalación y configuración de paquetes
-URL test: http://httpbin.org/get<p>
+La idea surge a la hora de monitorizar la url donde aparecen las ips que han descargado el malware, el panel de control.<p>
+En principio la descarga la hacía con un simple curl y proxychains, me descargaba el html, lo limpiaba, quedándome solo las ips para luego subirlas
+a elasticsearch. Como soy vaga, quiero monitorizar este proceso, descargando la página en formato json. Dejándolo limpio para que pueda cargarlo
+con logstash, intentando no perder la fecha del evento.<p>
+La generación de ficheros se hace con un cron cada 5'.    
 
-###Installing TOR and privoxy<p>
-    apt-get install tor tor-geoipdb privoxy<p>
+## Instalación y configuración de TOR y privoxy
+```bash
+apt-get install tor tor-geoipdb privoxy
+```
+
+## Configurando TOR
+```bash
+tor --hash-password passhere 
+```
+En el párrafo anterior hemos generado un hash de la clave ( passhere ) el cual lo debemos indicar en el fichero de configuración de tor.<p>
+Copia el hash generado en el fichero **/etc/tor/torrc** y activa la autenticación en tor ( socks5 )
+```bash
+ControlPort 9051
+HashedControlPassword generatedhash
+```
+
+## Configura privoxy:
+Añade las siguientes lineas en el fichero de configuración de privoxy **/etc/privoxy/config**<p>
+```bash
+forward-socks5t   /               127.0.0.1:9050 .
+listen-address  127.0.0.1:8118
+``` 
+Las siguientes lineas son opcionales<p>
+```bash
+keep-alive-timeout 600
+default-server-timeout 600
+socket-timeout 600
+```
+Reiniciamos servicios
+```bash
+service tor restart
+service privoxy restart
+```
+## Test
+Comprueba que funciona el proxy y tor. Ejecuta los siguientes comandos. El primero te dará tu IP pública, el segundo la
+ip del nodo de salida de tor, última te dará lo mismo que la anterior pero realizando la petición a través de el proxy (privoxy).    
+```bash
+curl http://ifconfig.me 
+torify curl http://ifconfig.me
+curl -x 127.0.0.1:8118 https://ifconfig.me
+```
 <p>
-###Configuring TOR<p>
-        tor --hash-password passhere<p>
-    copy the generated hash and add the below lines in configuration file /etc/tor/torrc<p>
-        ControlPort 9051<p>
-        HashedControlPassword generatedhash<p>
-<p>
-###Configuring privoxy: add the below lines in configuration file /etc/privoxy/config<p>
-        forward-socks5t   /               127.0.0.1:9050 .<p>
-        listen-address  127.0.0.1:8118<p>
-    optional<p>
-        keep-alive-timeout 600<p>
-        default-server-timeout 600<p>
-        socket-timeout 600<p>
-<p>
-restart service tor and privoxy<p>
-<p>
-###Test<p>
-    curl http://ifconfig.me # IP<p>
-    torify curl http://ifconfig.me # Tor<p>
-    curl -x 127.0.0.1:8118 https://ifconfig.me # privoxy/tor<p>
-<p>
-NOTE: test with module torpy =>  pip3 install torpy[requests]<p><
+    
+URL test: http://httpbin.org/get <p>
+NOTE: test with module torpy =>  pip3 install torpy[requests]<p>
+Last update: 2021-06-27 17:20:23 Sunday
