@@ -50,14 +50,14 @@ curl -x 127.0.0.1:8118 https://ifconfig.me
 <p>
 
 ## Roadmap
--[x] Configuración tor y privoxy
--[x] Descarga url desde tor buscando anonimato.
--[-] Analisis/parse html con modulo beautifulSoup
--[] Generar el objeto json del parse del html
--[] timestamp en el json
--[] Generar fichero json con resultado.
--[] ¿Cargar de json desde programa o desde logstash? se admite sugerencias.
-    
+-[x] Configuración tor y privoxy<p>
+-[x] Descarga url desde tor buscando anonimato<p>
+-[-] Analisis/parse html con modulo beautifulSoup<p>
+-[] Generar el objeto json del parse del html<p>
+-[] timestamp en el json<p>
+-[] Generar fichero json con resultado<p>
+-[] ¿Cargar de json desde programa o desde logstash? se admite sugerencias<p>
+
 URL test: http://httpbin.org/get <p>
 NOTE: test with module torpy =>  pip3 install torpy[requests]<p>
 Last update: 2021-06-27 17:20:23 Sunday
