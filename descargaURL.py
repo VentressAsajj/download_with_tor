@@ -29,8 +29,8 @@ def parserARGs():
             prog = 'descargaURL.py', usage='%(prog)s [-h]'
     )
     parser._optionals.title = "Opciones:"
-    parser.add_argument("-f", "--outputfile", help="fichero de salida en formato json", nargs='?', type=argparse.FileType('w'), default=sys.stdin)
-    parser.add_argument("-t", "--test", help="verifica la conexion con nodo tor", choices=["json"], nargs='?', default=sys.stdin)
+    parser.add_argument("-f", "--outputfile", help="fichero de salida en formato json", choices=["json"], nargs='?', type=argparse.FileType('w'), default=sys.stdin)
+    parser.add_argument("-t", "--test", help="verifica la conexion con nodo tor", default=sys.stdin)
     parser.add_argument("-v", "--verbose",   help="output verbose", action="store_true")
     parser.add_argument("-V", "--version", action='version', version='%(prog)s version 1.0')
     return parser.parse_args()
