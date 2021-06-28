@@ -82,6 +82,7 @@ def createJSON(timestamp,reg):
     timezone = ipinfo['timezone']
     postal = ipinfo['postal']
     code_country = ipinfo['country']
+    asn= ipinfo['org']
     latitude,longitude = ipinfo['loc'].split(',')
     data_set = {
         'timestamp'   : timestamp,
@@ -92,6 +93,7 @@ def createJSON(timestamp,reg):
         'postal'      : postal,
         'region'      : region,
         'latitude'    : latitude,
+        'asn'         : asn,
         'longitude'   : longitude,
         'location'    : {'lon':longitude, 'lat':latitude},
         'country'     : pais,
