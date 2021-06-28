@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # by @nuria_imeq
 '''
-Analizo la etiqueta <br> de la pagina que me descargo
+Analizo html de pagina C2 malware. Se procesa automaticamente.
 '''
 
 import json
