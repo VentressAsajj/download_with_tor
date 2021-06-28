@@ -53,10 +53,10 @@ curl -x 127.0.0.1:8118 https://ifconfig.me
 - [x] Configuración tor y privoxy<p>
 - [x] Descarga url desde tor buscando anonimato<p>
 - [x] Analisis/parse html con modulo beautifulSoup<p>
-      - [x] Generar el objeto json del parse del html<p>
-      - [x] timestamp en el json<p>
+  - [x] Generar el objeto json del parse del html<p>
+  - [x] timestamp en el json<p>
 - [x] Generar fichero json con resultado<p>
-- [x] ¿Cargar de json desde programa o desde logstash? se admite sugerencias<p>
+- [x] ¿Cargar json desde programa o desde logstash? se admite sugerencias<p>
 - [ ] Consulta por IP en ipinfo.io para obtener el ASN 
 - [ ] Registro de actividad. Creación de log.<p>
 
