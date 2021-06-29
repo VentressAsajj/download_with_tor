@@ -76,4 +76,4 @@ IP. No nos interesa puesto que esta IP ya se ha descargado el malware.
 
 URL test: http://httpbin.org/get <p>
 NOTE: test with module torpy =>  pip3 install torpy[requests]<p>
-date: "Last update `r format(Sys.time(), '%d %B, %Y')`"
+Last update  mié 30 jun 2021 00:34:27 CEST
