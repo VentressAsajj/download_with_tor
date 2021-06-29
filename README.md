@@ -60,9 +60,9 @@ curl -x 127.0.0.1:8118 https://ifconfig.me
 - [x] Generar fichero json con resultado<p>
 - [x] ¿Cargar json desde programa o desde logstash? se admite sugerencias<p>
 - [x] Consulta por IP en ipinfo.io para obtener el ASN 
-- [ ] Añadir como argumento de entrada la url.<p>
-- [ ] Posibiliad que lea fichero html como argumento de entrada<p>
-- [ ] Añadir como argumento el dominio,<p>
+- [X] Añadir como argumento de entrada la url.<p>
+- [X] Posibiliad que lea fichero html como argumento de entrada<p>
+- [X] Añadir como argumento el dominio,<p>
 - [ ] Registro de actividad. Creación de log.<p>
 
 Decido hacer la ingesta a logstash en vez de usar el modulo de logstash de python. Quizá
