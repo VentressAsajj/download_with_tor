@@ -1,9 +1,11 @@
 # Descarga de url usando privoxy con tor
 Bueno sinceramente aún no tengo claro si lo hago con privoxy o solo con tor.<p>
-La idea surge a la hora de monitorizar la url donde aparecen las ips que han descargado el malware, el panel de control.<p>
+La idea surge a la hora de monitorizar la url donde aparecen las ips que han descargado el malware, el C2.<p>
 En principio la descarga la hacía con un simple curl y proxychains, me descargaba el html, lo limpiaba, quedándome solo las ips para luego subirlas
 a elasticsearch. Como soy vaga, quiero monitorizar este proceso, descargando la página en formato json. Dejándolo limpio para que pueda cargarlo
-con logstash, intentando no perder la fecha del evento.<p>
+con logstash, intentando no perder la fecha del evento y otros datos que son muy interesantes.<p>
+Además si cargo los eventos en elastic, y realizando la consulta para obtener el ASN de las IPs, podré generar alertas para instituciones
+que son "delicadas".
 La generación de ficheros se hace con un cron cada 5'.    
 
 ## Instalación y configuración de TOR y privoxy
@@ -57,13 +59,20 @@ curl -x 127.0.0.1:8118 https://ifconfig.me
   - [x] timestamp en el json<p>
 - [x] Generar fichero json con resultado<p>
 - [x] ¿Cargar json desde programa o desde logstash? se admite sugerencias<p>
-- [ ] Consulta por IP en ipinfo.io para obtener el ASN 
+- [x] Consulta por IP en ipinfo.io para obtener el ASN 
+- [ ] Añadir como argumento de entrada la url.<p>
+- [ ] Posibiliad que lea fichero html como argumento de entrada<p>
+- [ ] Añadir como argumento el dominio,<p>
 - [ ] Registro de actividad. Creación de log.<p>
 
 Decido hacer la ingesta a logstash en vez de usar el modulo de logstash de python. Quizá
 lo mire.
 
-Falta hacer 
+Ya he realizado la ingesta en elasticsearch. Al ser un proceso automatizado que se ejecutaba cada 5',
+las IPs se repetían y eran eventos duplicados en elasticsearch. Para subsanarlo, he creado un fingerprint
+del campo source_ip y vincularlo con el id del documento, de esta manera con cargará los eventos con la misma
+IP. No nos interesa puesto que esta IP ya se ha descargado el malware.
+
 
 URL test: http://httpbin.org/get <p>
 NOTE: test with module torpy =>  pip3 install torpy[requests]<p>
