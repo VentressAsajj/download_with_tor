@@ -70,10 +70,10 @@ lo mire.
 
 Ya he realizado la ingesta en elasticsearch. Al ser un proceso automatizado que se ejecutaba cada 5',
 las IPs se repetían y eran eventos duplicados en elasticsearch. Para subsanarlo, he creado un fingerprint
-del campo source_ip y vincularlo con el id del documento, de esta manera con cargará los eventos con la misma
+del campo source_ip y vincularlo con el id del documento, de esta manera no cargará los eventos con la misma
 IP. No nos interesa puesto que esta IP ya se ha descargado el malware.
 
 
 URL test: http://httpbin.org/get <p>
 NOTE: test with module torpy =>  pip3 install torpy[requests]<p>
-Last update: 2021-06-27 17:20:23 Sunday
+date: "Last update `r format(Sys.time(), '%d %B, %Y')`"
