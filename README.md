@@ -42,8 +42,9 @@ curl http://ifconfig.me
 torify curl http://ifconfig.me
 curl -x 127.0.0.1:8118 https://ifconfig.me
 ```
-<p>
+  
 ## Introducción
+
 Bueno sinceramente aún no tengo claro si lo hago con privoxy o solo con tor.<p>
 La idea surge a la hora de monitorizar la url donde aparecen las ips que han descargado el malware, el C2.<p>
 En principio la descarga la hacía con un simple curl y proxychains, me descargaba el html, lo limpiaba, quedándome solo las ips para luego subirlas
