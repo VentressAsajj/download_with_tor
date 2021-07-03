@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # by @nuria_imeq
 '''
-Analizo html de pagina C2 malware. Se procesa automaticamente.
+./descargaURL -h
 '''
 
 import json
@@ -11,6 +11,7 @@ import requests
 import sys
 import codecs
 import re
+from datetime import datetime
 from stem import Signal
 from stem.control import Controller
 from bs4 import BeautifulSoup
@@ -18,8 +19,7 @@ from bs4 import BeautifulSoup
 # Configuracion de headers y url de descarga. Configura el user-agent para
 # que sea Windows y no tengas problemas con la descarga, aunque puede poner
 # el que quieras
-url = 'URLdedescarga'
-token = "pontutokenIPINFO"
+token = "TOKEN_IPINFO"
 headers = { 'User-Agent' : 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)'}
 
 
@@ -29,8 +29,11 @@ def parserARGs():
             prog = 'descargaURL.py', usage='%(prog)s [-h]'
     )
     parser._optionals.title = "Opciones:"
-    parser.add_argument("-f", "--outputfile", help="fichero de salida en formato json", choices=["json"], nargs='?', type=argparse.FileType('w'), default=sys.stdin)
-    parser.add_argument("-t", "--test", help="verifica la conexion con nodo tor", default=sys.stdin)
+    parser.add_argument("-o", "--outputfile", help="fichero de salida en formato json", nargs='?', type=argparse.FileType('w'), default="salida.json")
+    parser.add_argument("-i", "--inputfile", help="fichero de entrada en formato html", nargs='?', type=argparse.FileType('r'), default="entrada.html")
+    parser.add_argument("-u", "--url", help="url para descargar")
+    parser.add_argument("-d", "--domain_malware", help="dominio malware")
+    parser.add_argument("-t", "--test", help="verifica la conexion con nodo tor", nargs='?', default=sys.stdin)
     parser.add_argument("-v", "--verbose",   help="output verbose", action="store_true")
     parser.add_argument("-V", "--version", action='version', version='%(prog)s version 1.0')
     return parser.parse_args()
@@ -46,7 +49,7 @@ def testConnectTorIdentity():
 
 def newTorIdentity():
     with Controller.from_port(port=9051) as controller:
-        controller.authenticate(password='pontuclaveentor')
+        controller.authenticate(password='PASSWORD_TOR')
         controller.signal(Signal.NEWNYM)
         print("Success!! New Tor connection")
 
@@ -54,8 +57,17 @@ def downloadHTML():
     # python -m http.server
     session = testConnectTorIdentity()
     response = session.get(url, headers=headers)
-
     return response.text
+
+def currentDate(date):
+    day   = date.day
+    month = date.month
+    year  = date.year
+    hour  = date.hour
+    min   = date.minute
+    seg   = date.second
+    now = "{}-{}-{}_{}{}{}".format(year,month,day,hour,min,seg)
+    return now
 
 def showInfoIP(ip):
     # consulta ipinfo = https://ipinfo.io/IP/json?token=pontutoken'
@@ -69,15 +81,13 @@ def showInfoIP(ip):
     response = session.get(url)
     return json.loads(response.text)
 
-def createJSON(timestamp,reg):
+def createJSON(timestamp,reg,domain):
+    data_set={}
     dispositivo = reg[3].strip()
     source_ip = reg[4].strip()
-    ciudad = reg[5].strip()
-    ciudad.encode('utf-8')
-    region = reg[6].strip()
-    region.encode('utf-8')
-    pais = reg[7].strip()
-    pais.encode('utf-8')
+    ciudad = (reg[5].strip())
+    region = (reg[6].strip())
+    pais = (reg[7].strip())
     ipinfo = showInfoIP(source_ip)
     timezone = ipinfo['timezone']
     postal = ipinfo['postal']
@@ -85,41 +95,42 @@ def createJSON(timestamp,reg):
     asn= ipinfo['org']
     latitude,longitude = ipinfo['loc'].split(',')
     data_set = {
-        'timestamp'   : timestamp,
-        'timezone'    : timezone,
-        'dispositivo' : dispositivo,
-        'source_ip'   : source_ip,
-        'city'        : ciudad,
-        'postal'      : postal,
-        'region'      : region,
-        'latitude'    : latitude,
-        'asn'         : asn,
-        'longitude'   : longitude,
-        'location'    : {'lon':longitude, 'lat':latitude},
-        'country'     : pais,
-        'code_country':code_country
+        'timestamp'     : timestamp,
+        'timezone'      : timezone,
+        'dispositivo'   : dispositivo,
+        'source_ip'     : source_ip,
+        'city'          : ciudad,
+        'postal'        : postal,
+        'region'        : region,
+        'latitude'      : latitude,
+        'asn'           : asn,
+        'longitude'     : longitude,
+        'location'      : {'lon':longitude, 'lat':latitude},
+        'country'       : pais,
+        'domain_malware': domain,
+        'code_country'  :code_country
     }
     json_data = json.dumps(data_set, ensure_ascii=False)
-    print(json_data)
+    #print(json_data)
     return json_data
 
-def parseHTML(response,file):
+def parseHTML(response,file,domain):
     # el title contiene el total de ips que se han descargado el malware
     bs = BeautifulSoup(response, 'html.parser')
     cont_ips = (bs.html.body.title).string
     total_ips = bs.find_all(string=re.compile("#"))
-    #print("IPs que han picado: ", cont_ips)
 
     # reg => cont # yy-mm-dd  #  hh:mm:ss # movil/pc # ip # ciudad # provincia # pais
-    cont = 1
+    cont = 000
     json_data = {}
+    now = currentDate(datetime.now())
+    file = file + "_" + now
     f = open(file, 'w')
     for list in total_ips:
         reg = list.split("#")
         timestamp = reg[1]+"T"+reg[2]+"."+str(cont)+"Z"
         timestamp = timestamp.replace(" ","")
-        cont += 1
-        data_set = createJSON(timestamp,reg)
+        data_set = createJSON(timestamp,reg,domain)
         f.write(data_set)
         f.write("\n")
 
@@ -128,18 +139,34 @@ def parseHTML(response,file):
 def main():
     newTorIdentity()
     args = parserARGs()
-    #print(args)
+    print(args)
     if ( args.test is None ):
         session = testConnectTorIdentity()
         print(session.get("https://httpbin.org/get").text)
         sys.exit(2)
+
+    if ( args.domain_malware is not None):
+        #print ("domain_malware ", args.domain_malware)
+        domain_malware = args.domain_malware
     else:
+        domain_malware = ""
+
+    if ( args.inputfile.name is not None ):
+        # puedes hacer una carga de un html
+        #response = codecs.open("salida.html", "r", "utf-8").read()
+        #print ("fichero entrada ", args.inputfile.name)
+        response = codecs.open(args.inputfile.name, "r", "utf-8").read()
+    elif ( args.url is not None ):
         # comento esto para no hacer ruido a los malosmalotes
-        #response = downloadHTML()
-        response = codecs.open("salida.html", "r", "utf-8").read()
-        parseHTML(response,args.outputfile.name)
+        print("paso url como argumento ", args.url)
+        response = downloadHTML()
+    else:
+        print ("o me das fichero de entrada o url pero darme algo :D")
+        sys.exit(2)
 
-
+    # parser html tanto si lo he descargado como si lo he leido de fichero
+    #print("fichero salida ", args.outputfile.name)
+    parseHTML(response,args.outputfile.name,domain_malware)
 
 if __name__ == "__main__":
     main()
