@@ -2,7 +2,15 @@
 # -*- coding: utf-8 -*-
 # by @nuria_imeq
 '''
-./descargaURL -h
+Descarga url con tor.
+El parse del html es algo especial, es un C2.
+Argumentos obligados, url y domain_malware, domain_malware es obligatorio porque
+lo uso, junto con la ip, para quitarme eventos duplicados. Se realiza el fingerprint de ambos.
+El fingerprint lo hago el logstash. Si no quieres que sea requerido quita required=True
+CAMBIA:
+    URL por la url que deseas descargar
+    TOKEN_IPINFO por el token de ipinfo
+    PASS_TOR por la clave que has puesto en TOR
 '''
 
 import json
@@ -19,6 +27,7 @@ from bs4 import BeautifulSoup
 # Configuracion de headers y url de descarga. Configura el user-agent para
 # que sea Windows y no tengas problemas con la descarga, aunque puede poner
 # el que quieras
+url = 'http://URL'
 token = "TOKEN_IPINFO"
 headers = { 'User-Agent' : 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)'}
 
@@ -30,8 +39,6 @@ def parserARGs():
     )
     parser._optionals.title = "Opciones:"
     parser.add_argument("-o", "--outputfile", help="fichero de salida en formato json", nargs='?', type=argparse.FileType('w'), default="salida.json")
-    parser.add_argument("-i", "--inputfile", help="fichero de entrada en formato html", nargs='?', type=argparse.FileType('r'), default="entrada.html")
-    parser.add_argument("-u", "--url", help="url para descargar")
     parser.add_argument("-d", "--domain_malware", help="dominio malware")
     parser.add_argument("-t", "--test", help="verifica la conexion con nodo tor", nargs='?', default=sys.stdin)
     parser.add_argument("-v", "--verbose",   help="output verbose", action="store_true")
@@ -49,7 +56,7 @@ def testConnectTorIdentity():
 
 def newTorIdentity():
     with Controller.from_port(port=9051) as controller:
-        controller.authenticate(password='PASSWORD_TOR')
+        controller.authenticate(password='PASS_TOR')
         controller.signal(Signal.NEWNYM)
         print("Success!! New Tor connection")
 
@@ -111,7 +118,7 @@ def createJSON(timestamp,reg,domain):
         'code_country'  :code_country
     }
     json_data = json.dumps(data_set, ensure_ascii=False)
-    #print(json_data)
+    print(json_data)
     return json_data
 
 def parseHTML(response,file,domain):
@@ -145,28 +152,16 @@ def main():
         print(session.get("https://httpbin.org/get").text)
         sys.exit(2)
 
-    if ( args.domain_malware is not None):
-        #print ("domain_malware ", args.domain_malware)
-        domain_malware = args.domain_malware
-    else:
-        domain_malware = ""
 
-    if ( args.inputfile.name is not None ):
-        # puedes hacer una carga de un html
-        #response = codecs.open("salida.html", "r", "utf-8").read()
-        #print ("fichero entrada ", args.inputfile.name)
-        response = codecs.open(args.inputfile.name, "r", "utf-8").read()
-    elif ( args.url is not None ):
-        # comento esto para no hacer ruido a los malosmalotes
-        print("paso url como argumento ", args.url)
-        response = downloadHTML()
-    else:
-        print ("o me das fichero de entrada o url pero darme algo :D")
+    # puedes hacer una carga de un html, solo descomenta esta linea y comenta la siguiente
+    response = codecs.open("entrada.html", "r", "utf-8").read()
+    # # comento esto para no hacer ruido a los malosmalotes
+    #response = downloadHTML()
+    if ( args.domain_malware is None):
+        print ("El dominio de malware debe ser especificado")
         sys.exit(2)
-
-    # parser html tanto si lo he descargado como si lo he leido de fichero
-    #print("fichero salida ", args.outputfile.name)
-    parseHTML(response,args.outputfile.name,domain_malware)
+        
+    parseHTML(response, args.outputfile.name, args.domain_malware)
 
 if __name__ == "__main__":
     main()
