@@ -6,10 +6,14 @@ El parse del html es algo especial, es un C2.
 Argumentos obligados, url y domain_malware, domain_malware es obligatorio porque
 lo uso, junto con la ip, para quitarme eventos duplicados. Se realiza el fingerprint de ambos.
 El fingerprint lo hago el logstash. Si no quieres que sea requerido quita required=True
-CAMBIA:
+
+IMPORTANTE - cambiar:
     URL por la url que deseas descargar
     TOKEN_IPINFO por el token de ipinfo
     PASS_TOR por la clave que has puesto en TOR
+
+Dependencias:
+    pip3 install stem requests bs4 requests[socks]
 
 Ejecucion:
     python3 descargaURL.py [ARGS]
