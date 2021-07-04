@@ -7,7 +7,7 @@ Por ahora no tengo fichero requirements.txt lo haré, mientras tanto puedes hace
 ```
   git clone https://github.com/VentressAsajj/download_with_tor.git
   cd download_with_tor
-  pip3 install stem  requests bs4 requests[socks]
+  pip3 install stem requests bs4 requests[socks]
 ```
 Tienes una ayuda:
 ```
