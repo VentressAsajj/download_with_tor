@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # by @nuria_imeq
 '''
@@ -11,6 +10,12 @@ CAMBIA:
     URL por la url que deseas descargar
     TOKEN_IPINFO por el token de ipinfo
     PASS_TOR por la clave que has puesto en TOR
+
+Ejecucion:
+    python3 descargaURL.py [ARGS]
+
+Ayuda:
+    python3 descargaURL.py -h
 '''
 
 import json
@@ -144,9 +149,9 @@ def parseHTML(response,file,domain):
     f.close()
 
 def main():
-    newTorIdentity()
     args = parserARGs()
-    print(args)
+    #print(args)
+    newTorIdentity()
     if ( args.test is None ):
         session = testConnectTorIdentity()
         print(session.get("https://httpbin.org/get").text)
