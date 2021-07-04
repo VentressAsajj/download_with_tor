@@ -5,30 +5,30 @@ Instala los modulos pyhton del programa.
 Por ahora no tengo fichero requirements.txt lo haré, mientras tanto puedes hacer:
 
 ```
-git clone https://github.com/VentressAsajj/download_with_tor.git
-cd download_with_tor
-pip3 install stem  requests bs4 requests[socks]
+  git clone https://github.com/VentressAsajj/download_with_tor.git
+  cd download_with_tor
+  pip3 install stem  requests bs4 requests[socks]
 ```
 Tienes una ayuda:
 ```
-python3 descargaURL.py -h
-usage: descargaURL.py [-h]
+  python3 descargaURL.py -h
+    usage: descargaURL.py [-h]
 
-Descarga una pagina usando TOR como proxy
+    Descarga una pagina usando TOR como proxy
 
-Opciones::
-  -h, --help            show this help message and exit
-  -o [OUTPUTFILE], --outputfile [OUTPUTFILE]
-                        fichero de salida en formato json
-  -i [INPUTFILE], --inputfile [INPUTFILE]
-                        fichero de entrada en formato html
-  -u URL, --url URL     url para descargar
-  -d DOMAIN_MALWARE, --domain_malware DOMAIN_MALWARE
-                        dominio malware
-  -t [TEST], --test [TEST]
-                        verifica la conexion con nodo tor
-  -v, --verbose         output verbose
-  -V, --version         show program's version number and exit
+    Opciones::
+      -h, --help            show this help message and exit
+      -o [OUTPUTFILE], --outputfile [OUTPUTFILE]
+                            fichero de salida en formato json
+      -i [INPUTFILE], --inputfile [INPUTFILE]
+                            fichero de entrada en formato html
+      -u URL, --url URL     url para descargar
+      -d DOMAIN_MALWARE, --domain_malware DOMAIN_MALWARE
+                            dominio malware
+      -t [TEST], --test [TEST]
+                            verifica la conexion con nodo tor
+      -v, --verbose         output verbose
+      -V, --version         show program's version number and exit
 
 ```
 Puedes pasarle el dominio del la url para que quede como campo en el fichero json.<p>
