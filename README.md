@@ -7,13 +7,11 @@ Por ahora no tengo fichero requirements.txt lo haré, mientras tanto puedes hace
 ```
 git clone https://github.com/VentressAsajj/download_with_tor.git
 cd download_with_tor
-chmod +x descargaURL.py 
-pip3 install json argparse requests codecs re BeautifulSoup stem
+pip3 install stem  requests bs4 requests[socks]
 ```
-No estoy muy segura porque ya tenía modulos instalados, venga prometo hacerlo bien :D
 Tienes una ayuda:
 ```
-./descargaURL.py -h
+python3 descargaURL.py -h
 usage: descargaURL.py [-h]
 
 Descarga una pagina usando TOR como proxy
@@ -47,13 +45,13 @@ Puedes realizar un test para ver si te funciona la red TOR.<p>
 - [x] Generar fichero json con resultado<p>
 - [x] ¿Cargar json desde programa o desde logstash? se admite sugerencias<p>
 - [x] Consulta por IP en ipinfo.io para obtener el ASN 
-- [X] Añadir como argumento de entrada la url.<p>
-- [X] Posibiliad que lea fichero html como argumento de entrada<p>
-- [X] Añadir como argumento el dominior.<p>
+- [-] Añadir como argumento de entrada la url. Descartado<p>
+- [-] Posibiliad que lea fichero html como argumento de entradar. Descartado<p>
+- [X] Añadir como argumento el dominio.<p>
 - [X] Añadir marca de tiempo en el fichero de salida.<p>
 - [ ] Registro de actividad. Creación de log.<p>
 - [ ] Analizando el phishing publicado en tw.
 - [ ] Mirar modulo torpy[request] por si merece la pena.
 
 
-Last update  mié 30 jun 2021 23:01:27 CEST
+Last update  dom 04 jul 2021 11:56:25 CEST
