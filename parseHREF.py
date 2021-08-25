@@ -47,10 +47,6 @@ def main():
     session = ConnectTorIdentity()
     response = session.get(url, headers=headers)
     soup = BeautifulSoup(response.content, 'html.parser')
-    #for a in soup.find_all('a', href=True):
-        #if a.text:
-            #print(a)
-
     links = [a['href'] for a in soup.find_all('a', href=True)]
     for lnk in links:
         data_set = json.dumps({'href':lnk})
